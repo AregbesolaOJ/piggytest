@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   useColorScheme,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -14,14 +13,14 @@ import {useForm} from 'react-hook-form';
 import FormField from './FormField';
 import Button from './Button';
 
-export type FormData = {
+export interface FormData {
   confirm_password: string;
   email: string;
   firstname: string;
   lastname: string;
   password: string;
   phone_number: string | undefined;
-};
+}
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
