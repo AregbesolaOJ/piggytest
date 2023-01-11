@@ -1,15 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import React from 'react';
-import {StyleSheet, Text, TextInput} from 'react-native';
+import React, {PropsWithChildren} from 'react';
+import {StyleSheet, Text, TextInput, TextInputProps} from 'react-native';
 
 import {Controller} from 'react-hook-form';
 import {
@@ -41,18 +31,20 @@ type FormFieldProps = {
     }>
   >;
   control: Control<FormData, any>;
+  inputProps?: TextInputProps;
 };
 
 // const FormField: React.FC<FormFieldProps> = ({...props}) => {} ---> assigns a children we may not use
 // function FormField({...props}: FormFieldProps) {} ---> better option, no need to worry about return type
 
-function FormField({
+const FormField = ({
   name,
   placeholder,
   rules,
   errors,
   control,
-}: FormFieldProps): JSX.Element {
+  inputProps,
+}: PropsWithChildren<FormFieldProps>): JSX.Element => {
   return (
     <Controller
       control={control}
@@ -67,6 +59,7 @@ function FormField({
             onBlur={onBlur}
             onChangeText={textValue => onChange(textValue)}
             value={value}
+            {...inputProps}
           />
           {errors?.[name] && (
             <Text style={styles.errorMsgStyle}>
@@ -78,7 +71,7 @@ function FormField({
       name={name}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
   textInputStyle: {

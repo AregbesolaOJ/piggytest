@@ -1,13 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import React from 'react';
 import {
   ScrollView,
@@ -22,6 +12,7 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {useForm} from 'react-hook-form';
 import FormField from './FormField';
+import Button from './Button';
 
 export type FormData = {
   confirm_password: string;
@@ -105,6 +96,9 @@ const App = () => {
           <FormField
             control={control}
             placeholder="Password"
+            inputProps={{
+              secureTextEntry: true,
+            }}
             errors={errors}
             rules={{
               required: 'Password is required',
@@ -130,6 +124,9 @@ const App = () => {
             control={control}
             placeholder="Confirm Password"
             errors={errors}
+            inputProps={{
+              secureTextEntry: true,
+            }}
             rules={{
               required: 'Confirm Password is required',
               validate: value =>
@@ -138,11 +135,9 @@ const App = () => {
             name="confirm_password"
           />
 
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            onPress={handleSubmit(onSubmit)}>
+          <Button onPress={handleSubmit(onSubmit)}>
             <Text style={{color: '#FFFFFF', fontSize: 16}}>Sign Up</Text>
-          </TouchableOpacity>
+          </Button>
         </View>
       </ScrollView>
     </>
@@ -165,18 +160,6 @@ const styles = StyleSheet.create({
   formStyle: {
     paddingLeft: 20,
     paddingRight: 20,
-  },
-  buttonStyle: {
-    alignSelf: 'center',
-    backgroundColor: '#31D9DC',
-    width: '40%',
-    height: 40,
-    borderRadius: 20,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 40,
-    marginBottom: 6,
   },
 });
 
