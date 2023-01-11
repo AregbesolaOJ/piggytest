@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^1.9.0",
     "@types/react-native-vector-icons": "^6.4.12",
     "react": "18.1.0",
+    "react-hook-form": "^7.41.5",
     "react-native": "0.70.4",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-pager-view": "^6.0.2",

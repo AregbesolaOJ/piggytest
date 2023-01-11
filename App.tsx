@@ -8,94 +8,144 @@
  * @format
  */
 
-import React, {type PropsWithChildren} from 'react';
+import React from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {useForm} from 'react-hook-form';
+import FormField from './FormField';
 
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+export type FormData = {
+  confirm_password: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+  phone_number: string | undefined;
 };
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: {errors},
+  } = useForm<FormData>();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this to
-            the strangest thing ever happened screen and then come back to see
-            your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+      <ScrollView style={styles.containerStyle}>
+        <Text style={styles.textStyle}>Register Form</Text>
+        <View style={styles.formStyle}>
+          <FormField
+            control={control}
+            placeholder="Firstname"
+            errors={errors}
+            rules={{required: 'Firstname is required'}}
+            name="firstname"
+          />
+
+          <FormField
+            control={control}
+            placeholder="Lastname"
+            errors={errors}
+            rules={{required: 'Lastname is required'}}
+            name="lastname"
+          />
+
+          <FormField
+            control={control}
+            placeholder="Email Address"
+            errors={errors}
+            rules={{
+              required: 'Email is required',
+              pattern: {
+                value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-zA-Z0-9.-]$/,
+                message: 'Invalid email',
+              },
+            }}
+            name="email"
+          />
+
+          <FormField
+            control={control}
+            placeholder="Phone Number"
+            errors={errors}
+            rules={{
+              required: 'Phone Number is required',
+              pattern: {
+                value: /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/,
+                message: 'Invalid phone number',
+              },
+            }}
+            name="phone_number"
+          />
+
+          <FormField
+            control={control}
+            placeholder="Password"
+            errors={errors}
+            rules={{
+              required: 'Password is required',
+              minLength: {
+                value: 8,
+                message: 'Password must be atleast 8 charecters',
+              },
+              maxLength: {
+                value: 32,
+                message: 'Password must not have more than 32 charecters',
+              },
+              pattern: {
+                value:
+                  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*#!@$%^&]).{8,32}$/,
+                message:
+                  'Password must contain atleast 1 uppercase, 1 lowercase, 1 special character(!@#$%^&*) and 1 digit',
+              },
+            }}
+            name="password"
+          />
+
+          <FormField
+            control={control}
+            placeholder="Confirm Password"
+            errors={errors}
+            rules={{
+              required: 'Confirm Password is required',
+              validate: value =>
+                value === watch('password') || 'Passwords does not match',
+            }}
+            name="confirm_password"
+          />
+
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={handleSubmit(onSubmit)}>
+            <Text style={{color: '#FFFFFF', fontSize: 16}}>Sign Up</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 };
 
@@ -104,17 +154,29 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  containerStyle: {
+    marginTop: 50,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  textStyle: {
+    paddingLeft: 20,
+    fontSize: 20,
+    fontWeight: 'bold',
   },
-  highlight: {
-    fontWeight: '700',
+  formStyle: {
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  buttonStyle: {
+    alignSelf: 'center',
+    backgroundColor: '#31D9DC',
+    width: '40%',
+    height: 40,
+    borderRadius: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 40,
+    marginBottom: 6,
   },
 });
 
